@@ -2,7 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const { stdin, stdout } = process;
 
-console.log('Программа для записи в файл. Для завершения нажмите Ctrl + C или введите "exit".');
+stdout.write('Программа для записи в файл. Для завершения нажмите Ctrl + C или введите "exit".');
+stdout.write('\n');
 
 fs.writeFile(path.join(__dirname, 'text.txt'), '', (err) => {
   if (err) throw err;
@@ -14,7 +15,7 @@ fs.writeFile(path.join(__dirname, 'text.txt'), '', (err) => {
 stdin.on('data', (data) => {
   const input = data.toString().trim();
   if (input.toLowerCase() === 'exit') {
-    console.log('Программа завершена');
+    stdout.write('Программа завершена');
     process.exit();
   } else {
     fs.appendFile(path.join(__dirname, 'text.txt'), input + '\n', (err) => {
@@ -25,7 +26,7 @@ stdin.on('data', (data) => {
 
 process.on('SIGINT', () => {
   stdout.write('\n');
-  console.log('Программа завершена пользователем');
+  stdout.write('Программа завершена пользователем');
   stdout.write('\n');
   process.exit();
  });
