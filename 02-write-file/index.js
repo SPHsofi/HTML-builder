@@ -15,7 +15,7 @@ fs.writeFile(path.join(__dirname, 'text.txt'), '', (err) => {
 stdin.on('data', (data) => {
   const input = data.toString().trim();
   if (input.toLowerCase() === 'exit') {
-    stdout.write('Программа завершена');
+    stdout.write('Программа завершена. До новых встречь)');
     process.exit();
   } else {
     fs.appendFile(path.join(__dirname, 'text.txt'), input + '\n', (err) => {
@@ -26,7 +26,7 @@ stdin.on('data', (data) => {
 
 process.on('SIGINT', () => {
   stdout.write('\n');
-  stdout.write('Программа завершена пользователем');
+  stdout.write('Программа завершена. До новых встречь)');
   stdout.write('\n');
   process.exit();
  });
