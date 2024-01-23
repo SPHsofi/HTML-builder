@@ -5,14 +5,23 @@ const folderPath = path.join(__dirname, 'files');
 const pathNewFolder = path.join(__dirname, 'files-copy');
 
 function clearDirectory(source, target) {
-  fs.rm(target, { recursive: true }, (err) => {
-    if (err) {
-      console.error('Ошибка очистки папки =>', err);
-    } else {
+  fs.promises.access(target, fs.constants.F_OK)
+    .then(() => fs.promises.rm(target, { recursive: true }))
+    .then(() => {
       copyDirectory(source, target);
-    }
-  });
-}
+    })
+    .catch((err) => {
+      if (err.code === 'ENOENT') {
+        return fs.promises.mkdir(target, { recursive: true });
+      } else {
+        console.error('Ошибка очистки папки =>', err);
+      }
+    })
+    .catch((err) => {
+      console.error('Ошибка создания папки =>', err);
+    });
+  }
+  
 
 function copyDirectory(source, target) {
   fs.mkdir(target, { recursive: true }, (err) => {
@@ -35,9 +44,7 @@ function copyDirectory(source, target) {
                 } else {
                   fs.copyFile(currentPath, targetPath, (err) => {
                     if (err) {
-                      console.error('Ошибка кописрования файлов =>', err);
-                    } else {
-                      console.log(`Файл "${file}" скопирован успешно в новую папку`);
+                      console.error('Ошибка копирования файлов =>', err);
                     }
                   });
                 }
